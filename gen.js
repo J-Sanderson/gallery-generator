@@ -1,8 +1,11 @@
 "use strict";
 const fs = require("fs");
 const { performance } = require("perf_hooks");
+const Jimp = require("jimp");
 
 let t0 = performance.now();
+
+const thumbSize = 200;
 
 console.log("starting generator...");
 
@@ -15,10 +18,16 @@ let images = JSON.parse(fs.readFileSync("input/images.json", "utf8"));
 console.log("writing gallery page...");
 let rows = [];
 images.forEach(function(img) {
+  Jimp.read(`./input/img/${img.img}`, (err, image) => {
+    if (err) throw err;
+    image
+      .resize(thumbSize, Jimp.AUTO)
+      .write(`./output/img/thumbs/t-${img.img}`);
+  });
   rows.push(`<tr>
     <td>
       <a href='img/${img.img}'>
-        <img src='img/${img.img}' width='200'>
+        <img src='img/thumbs/t-${img.img}'>
       </a>
     </td>
     <td>
