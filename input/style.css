@@ -43,6 +43,7 @@ header h1 {
   background-color: var(--descblock);
   display: flex;
   align-items: flex-start;
+  flex-direction: row;
   width: 80%;
   margin: 20px auto;
 }
@@ -54,7 +55,7 @@ header h1 {
 .description {
   padding: 0 15px;
   font-size: small;
-  border-left: 1px solid var(--text);
+  border: 0 0 0 1px solid var(--text);
   align-self: stretch;
 }
 
@@ -68,4 +69,18 @@ footer {
   border-top: 1px solid var(--text);
   margin-top: 20px;
   padding: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+  .img-container {
+    flex-direction: column;
+    width: 90%;
+  }
+  .thumb-container {
+    align-self: stretch;
+    border-bottom: 1px solid var(--text);
+  }
+  .thumb-container img {
+    margin: auto;
+  }
 }
