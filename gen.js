@@ -54,6 +54,16 @@ chunkedImages.forEach((chunk, index) => {
   let page = pageTemplate;
   page = page.split("<!-- IMAGES -->");
   page = page[0] + rows + page[1];
+
+  if (chunkedImages.length > 1) {
+    let links = [];
+    for (let i = 0; i < chunkedImages.length; i++) {
+      links.push(i === index? `<li>${i + 1}</li>` : `<li><a href="${i + 1}.html">${i + 1}</a></li>`)
+    }
+    links = links.join("");
+    page = page.split("<!-- PAGINATION -->");
+    page = page[0] + `<nav class="pagination"><ul>${links}</ul></nav>` + page[1];
+  }
   fs.writeFileSync(`output/${index + 1}.html`, page);
 })
 
