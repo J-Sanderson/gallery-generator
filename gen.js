@@ -60,9 +60,19 @@ chunkedImages.forEach((chunk, index) => {
     for (let i = 0; i < chunkedImages.length; i++) {
       links.push(i === index? `<li>${i + 1}</li>` : `<li><a href="${i + 1}.html">${i + 1}</a></li>`)
     }
-    links = links.join("");
+    const nav = `<nav class="pagination">
+      <ul>
+        <li>
+          ${index === 0 ? '&lt;' : `<a href="${index}.html" title="Previous">&lt;</a>`}
+        </li>
+        ${links.join("")}
+        <li>
+          ${index === chunkedImages.length - 1 ? '&gt;' : `<a href="${index + 2}.html" title="Next">&gt;</a>`}
+        </li>
+      </ul>
+    </nav>`
     page = page.split("<!-- PAGINATION -->");
-    page = page[0] + `<nav class="pagination"><ul>${links}</ul></nav>` + page[1];
+    page = page[0] + nav + page[1];
   }
   fs.writeFileSync(`output/${index + 1}.html`, page);
 })
