@@ -6,7 +6,7 @@ const Jimp = require("jimp");
 let t0 = performance.now();
 
 const thumbSize = 200;
-const imagesToPage = 2; //temp value
+const imagesToPage = 10;
 
 console.log("starting generator...");
 
