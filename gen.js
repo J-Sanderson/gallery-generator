@@ -8,7 +8,7 @@ let t0 = performance.now();
 
 let args = parseArgs(process.argv.slice(2));
 
-// TODO make thumn size arg
+// TODO make thumb size arg
 const thumbSize = 200;
 const imagesToPage = args.n || 10;
 
@@ -16,6 +16,12 @@ console.log("starting generator...");
 
 console.log("reading page template...");
 let pageTemplate = fs.readFileSync("input/template.html", "utf8");
+
+let imagePageTemplate;
+if (args.p) {
+  console.log("reading image page template...");
+  imagePageTemplate = fs.readFileSync("input/template-image.html", "utf8");
+}
 
 console.log("loading image list...");
 let images = JSON.parse(fs.readFileSync("input/images.json", "utf8"));
@@ -30,7 +36,7 @@ const numPages = chunkedImages.length;
 chunkedImages.forEach((chunk, index) => {
   console.log(`writing gallery page ${index + 1} of ${numPages}...`);
   let rows = [];
-  chunk.forEach((img) => {
+  chunk.forEach((img, imgIndex) => {
     Jimp.read(`./input/img/${img.img}`, (err, image) => {
       if (err) throw err;
       image
@@ -38,11 +44,17 @@ chunkedImages.forEach((chunk, index) => {
         .write(`./output/img/thumbs/t-${img.img}`);
     });
     if (args.p) {
+      const pageName = `img-${imgIndex + (index * imagesToPage) + 1}.html`
       rows.push(`
-        <a href='img/${img.img}'>
+        <a href='${pageName}'>
           <img src='img/thumbs/t-${img.img}' class='lone-img'>
         </a>`
       );
+      let imagePage = imagePageTemplate;
+      imagePage = imagePage.split("<!-- IMAGE -->");
+      imagePage = imagePage[0] + `<img src="img/${img.img}">` + imagePage[1];
+      console.log(`writing page ${pageName}...`);
+      fs.writeFileSync(`output/${pageName}`, imagePage);
     } else {
       rows.push(
         `<div class="img-container">
