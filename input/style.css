@@ -38,13 +38,23 @@ header h1 {
   padding: 0 15px;
 }
 
+.all-images {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.lone-img {
+  margin: 20px;
+}
+
 .img-container {
+  text-align: left;
   border: 1px solid var(--text);
   background-color: var(--descblock);
   display: flex;
   align-items: flex-start;
   flex-direction: row;
-  width: 80%;
   margin: 20px auto;
 }
 

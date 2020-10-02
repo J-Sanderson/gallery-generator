@@ -8,6 +8,7 @@ let t0 = performance.now();
 
 let args = parseArgs(process.argv.slice(2));
 
+// TODO make thumn size arg
 const thumbSize = 200;
 const imagesToPage = args.n || 10;
 
@@ -36,21 +37,31 @@ chunkedImages.forEach((chunk, index) => {
         .resize(thumbSize, Jimp.AUTO)
         .write(`./output/img/thumbs/t-${img.img}`);
     });
-    rows.push(`<div class="img-container">
-      <div class="thumb-container">
+    if (args.p) {
+      rows.push(`
         <a href='img/${img.img}'>
-          <img src='img/thumbs/t-${img.img}'>
-        </a>
-      </div>
-      <div class="description">
-        <p>
-          <a href='img/${img.img}'>${img.img}</a>
-        </p>
-          ${img.desc || ""}
-        <p>
-        </p>
-      </div>
-    </div>`);
+          <img src='img/thumbs/t-${img.img}' class='lone-img'>
+        </a>`
+      );
+    } else {
+      rows.push(
+        `<div class="img-container">
+          <div class="thumb-container">
+            <a href='img/${img.img}'>
+              <img src='img/thumbs/t-${img.img}'>
+            </a>
+          </div>
+          <div class="description">
+            <p>
+              <a href='img/${img.img}'>${img.img}</a>
+            </p>
+              ${img.desc || ""}
+            <p>
+            </p>
+          </div>
+        </div>`
+      );
+    }
     fs.copyFileSync(`input/img/${img.img}`, `output/img/${img.img}`);
   });
   rows = rows.join("");
