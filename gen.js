@@ -52,7 +52,12 @@ chunkedImages.forEach((chunk, index) => {
       );
       let imagePage = imagePageTemplate;
       imagePage = imagePage.split("<!-- IMAGE -->");
-      imagePage = imagePage[0] + `<img src="img/${img.img}">` + imagePage[1];
+      const imageDetails = `
+        <h2>${img.img}</h2>
+        <img src="img/${img.img}">
+        <p>${img.desc || ''}</p>
+      `
+      imagePage = imagePage[0] + imageDetails + imagePage[1];
       console.log(`writing page ${pageName}...`);
       fs.writeFileSync(`output/${pageName}`, imagePage);
     } else {
