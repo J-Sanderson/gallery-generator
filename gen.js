@@ -38,6 +38,14 @@ chunkedImages.forEach((chunk, index) => {
   let rows = [];
 
   chunk.forEach((img, imgIndex) => {
+    if (!img.img) {
+      console.log('One of your entries in images.json is missing an img property. Add it to the entry, give it the correct filename, and restart the generator.');
+      process.exit();
+    }
+    if (!img.alt) {
+      console.log(`Image ${img.img} is missing alt text. Please add some into images.json using the alt property and restart the generator.`);
+      process.exit();
+    }
     Jimp.read(`./input/img/${img.img}`, (err, image) => {
       if (err) throw err;
       image
