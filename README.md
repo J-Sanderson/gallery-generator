@@ -1,10 +1,16 @@
 # gallery-generator
 
-WIP - generate image galleries in static HTML. Populate images.json with the required files.
+Generate image galleries in static HTML, either single-page (default, images display in a table alongside details) or multi-page (each image has its own page).
 
-Run: `npm install`, then `node gen.js`
+## Usage
 
-## Flags
+Install dependencies: `npm install`
+
+Populate images.json with the required files. "img" is mandatory, all others are optional. Make any changes as desired to the template html files and css. Do not remove the comments as they tell the generator where to place content.
+
+Run `node gen.js` with any required flags.
+
+### Flags
 
 `-n (number)` - specify images per page. Defaults to 10 if not given.
-`-p` - multi-page - each image has its own page.
+`-p` - specify multi-page mode - each image has its own page.
