@@ -29,6 +29,8 @@ header h1 {
   margin: 0;
 }
 
+/* main gallery page */
+
 .details {
   text-align: center;
   background-color: var(--descblock);
@@ -38,14 +40,32 @@ header h1 {
   padding: 0 15px;
 }
 
+.all-images {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.all-images a {
+  text-decoration: none;
+}
+
+.lone-img {
+  margin: 20px;
+}
+
 .img-container {
+  text-align: left;
   border: 1px solid var(--text);
   background-color: var(--descblock);
   display: flex;
   align-items: flex-start;
   flex-direction: row;
-  width: 80%;
   margin: 20px auto;
+}
+
+.img-container a {
+  text-decoration: underline;
 }
 
 .thumb-container img {
@@ -89,6 +109,25 @@ footer {
   margin-top: 20px;
   padding: 10px;
 }
+
+/* individual image page */
+
+.image-details {
+  text-align: center;
+  background-color: var(--descblock);
+  border: 1px solid var(--text);
+  width: 90%;
+  margin: 20px auto;
+  padding: 15px;
+}
+
+.image-details img {
+  max-width: 100%;
+  height: auto;
+  width: auto\9; /* ie8 */
+}
+
+/* small screens */
 
 @media only screen and (max-width: 600px) {
   .img-container {

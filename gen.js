@@ -8,6 +8,7 @@ let t0 = performance.now();
 
 let args = parseArgs(process.argv.slice(2));
 
+// TODO make thumb size arg
 const thumbSize = 200;
 const imagesToPage = args.n || 10;
 
@@ -16,8 +17,15 @@ console.log("starting generator...");
 console.log("reading page template...");
 let pageTemplate = fs.readFileSync("input/template.html", "utf8");
 
+let imagePageTemplate;
+if (args.p) {
+  console.log("reading image page template...");
+  imagePageTemplate = fs.readFileSync("input/template-image.html", "utf8");
+}
+
 console.log("loading image list...");
 let images = JSON.parse(fs.readFileSync("input/images.json", "utf8"));
+const imageLength = images.length
 
 let chunkedImages = [];
 while (images.length !== 0) {
@@ -29,28 +37,78 @@ const numPages = chunkedImages.length;
 chunkedImages.forEach((chunk, index) => {
   console.log(`writing gallery page ${index + 1} of ${numPages}...`);
   let rows = [];
-  chunk.forEach((img) => {
+  chunk.forEach((img, imgIndex) => {
     Jimp.read(`./input/img/${img.img}`, (err, image) => {
       if (err) throw err;
       image
         .resize(thumbSize, Jimp.AUTO)
         .write(`./output/img/thumbs/t-${img.img}`);
     });
-    rows.push(`<div class="img-container">
-      <div class="thumb-container">
-        <a href='img/${img.img}'>
-          <img src='img/thumbs/t-${img.img}'>
-        </a>
-      </div>
-      <div class="description">
-        <p>
-          <a href='img/${img.img}'>${img.img}</a>
-        </p>
-          ${img.desc || ""}
-        <p>
-        </p>
-      </div>
-    </div>`);
+    if (args.p) {
+      const pageIndex = imgIndex + (index * imagesToPage) + 1;
+      const pageName = `img-${pageIndex}.html`
+      rows.push(`
+        <a href='${pageName}'>
+          <img src='img/thumbs/t-${img.img}' class='lone-img'>
+        </a>`
+      );
+
+      let imagePage = imagePageTemplate;
+
+      imagePage = imagePage.split("<!-- IMAGE -->");
+      const imageDetails = `
+        <h2>${img.img}</h2>
+        <img src="img/${img.img}">
+        <p>${img.desc || ''}</p>
+      `
+      imagePage = imagePage[0] + imageDetails + imagePage[1];
+
+      imagePage = imagePage.split("<!-- PAGINATION -->");
+      const pagination = `
+        <nav class="pagination">
+          <ul>
+            <li>
+              ${pageIndex === 1
+                ? '&lt;' 
+                : `<a href="img-${pageIndex - 1}.html">&lt;</a>`
+              }
+            </li>
+            <li>
+              <a href="${index + 1}.html">Back</a>
+            </li>
+            <li>
+              ${pageIndex === imageLength
+                ? '&gt;' 
+                : `<a href="img-${pageIndex + 1}.html">&gt;</a>`
+              }
+            </li>
+          </ul>
+        </nav>
+      `
+
+      imagePage = imagePage[0] + pagination + imagePage[1];
+
+      console.log(`writing page ${pageName}...`);
+      fs.writeFileSync(`output/${pageName}`, imagePage);
+    } else {
+      rows.push(
+        `<div class="img-container">
+          <div class="thumb-container">
+            <a href='img/${img.img}'>
+              <img src='img/thumbs/t-${img.img}'>
+            </a>
+          </div>
+          <div class="description">
+            <p>
+              <a href='img/${img.img}'>${img.img}</a>
+            </p>
+              ${img.desc || ""}
+            <p>
+            </p>
+          </div>
+        </div>`
+      );
+    }
     fs.copyFileSync(`input/img/${img.img}`, `output/img/${img.img}`);
   });
   rows = rows.join("");
