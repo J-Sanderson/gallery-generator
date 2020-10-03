@@ -24,6 +24,11 @@ Run `node gen.js` with any required flags.
 * `-p` - specify multi-page mode - each image has its own page.
 * `-t (number)` - specify thumbnail width. Defaults to 200px if not given.
 
+## Sample outputs:
+
+* [Single page](https://profuse-brief-vicuna.glitch.me/single-page)
+* [Multi page](https://profuse-brief-vicuna.glitch.me/multi-page)
+
 ## Credits
 
 The lovely kitties used in the sample images are current and former residents of [Mog on the Tyne Cat Cafe](https://www.mogonthetyne.com/), Newcastle Upon Tyne. Drop by if you're in the area for cat cuddles and awesome cake.
