@@ -25,6 +25,7 @@ if (args.p) {
 
 console.log("loading image list...");
 let images = JSON.parse(fs.readFileSync("input/images.json", "utf8"));
+const imageLength = images.length
 
 let chunkedImages = [];
 while (images.length !== 0) {
@@ -44,13 +45,16 @@ chunkedImages.forEach((chunk, index) => {
         .write(`./output/img/thumbs/t-${img.img}`);
     });
     if (args.p) {
-      const pageName = `img-${imgIndex + (index * imagesToPage) + 1}.html`
+      const pageIndex = imgIndex + (index * imagesToPage) + 1;
+      const pageName = `img-${pageIndex}.html`
       rows.push(`
         <a href='${pageName}'>
           <img src='img/thumbs/t-${img.img}' class='lone-img'>
         </a>`
       );
+
       let imagePage = imagePageTemplate;
+
       imagePage = imagePage.split("<!-- IMAGE -->");
       const imageDetails = `
         <h2>${img.img}</h2>
@@ -58,6 +62,32 @@ chunkedImages.forEach((chunk, index) => {
         <p>${img.desc || ''}</p>
       `
       imagePage = imagePage[0] + imageDetails + imagePage[1];
+
+      imagePage = imagePage.split("<!-- PAGINATION -->");
+      const pagination = `
+        <nav class="pagination">
+          <ul>
+            <li>
+              ${pageIndex === 1
+                ? '&lt;' 
+                : `<a href="img-${pageIndex - 1}.html">&lt;</a>`
+              }
+            </li>
+            <li>
+              <a href="${index + 1}.html">Back</a>
+            </li>
+            <li>
+              ${pageIndex === imageLength
+                ? '&gt;' 
+                : `<a href="img-${pageIndex + 1}.html">&gt;</a>`
+              }
+            </li>
+          </ul>
+        </nav>
+      `
+
+      imagePage = imagePage[0] + pagination + imagePage[1];
+
       console.log(`writing page ${pageName}...`);
       fs.writeFileSync(`output/${pageName}`, imagePage);
     } else {
