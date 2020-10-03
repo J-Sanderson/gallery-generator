@@ -8,8 +8,7 @@ let t0 = performance.now();
 
 let args = parseArgs(process.argv.slice(2));
 
-// TODO make thumb size arg
-const thumbSize = 200;
+const thumbSize = args.t || 200;
 const imagesToPage = args.n || 10;
 
 console.log("starting generator...");
