@@ -36,6 +36,7 @@ const numPages = chunkedImages.length;
 chunkedImages.forEach((chunk, index) => {
   console.log(`writing gallery page ${index + 1} of ${numPages}...`);
   let rows = [];
+
   chunk.forEach((img, imgIndex) => {
     Jimp.read(`./input/img/${img.img}`, (err, image) => {
       if (err) throw err;
@@ -48,7 +49,7 @@ chunkedImages.forEach((chunk, index) => {
       const pageName = `img-${pageIndex}.html`
       rows.push(`
         <a href='${pageName}'>
-          <img src='img/thumbs/t-${img.img}' class='lone-img'>
+          <img src='img/thumbs/t-${img.img}' class='lone-img' alt="${img.alt}">
         </a>`
       );
 
@@ -57,7 +58,7 @@ chunkedImages.forEach((chunk, index) => {
       imagePage = imagePage.split("<!-- IMAGE -->");
       const imageDetails = `
         <h2>${img.img}</h2>
-        <img src="img/${img.img}">
+        <img src="img/${img.img}" alt="${img.alt}">
         <p>${img.desc || ''}</p>
       `
       imagePage = imagePage[0] + imageDetails + imagePage[1];
@@ -89,12 +90,13 @@ chunkedImages.forEach((chunk, index) => {
 
       console.log(`writing page ${pageName}...`);
       fs.writeFileSync(`output/${pageName}`, imagePage);
+
     } else {
       rows.push(
         `<div class="img-container">
           <div class="thumb-container">
             <a href='img/${img.img}'>
-              <img src='img/thumbs/t-${img.img}'>
+              <img src='img/thumbs/t-${img.img}' alt="${img.alt}">
             </a>
           </div>
           <div class="description">
@@ -108,8 +110,10 @@ chunkedImages.forEach((chunk, index) => {
         </div>`
       );
     }
+
     fs.copyFileSync(`input/img/${img.img}`, `output/img/${img.img}`);
   });
+
   rows = rows.join("");
   let page = pageTemplate;
   page = page.split("<!-- IMAGES -->");
