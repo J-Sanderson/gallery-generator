@@ -7,11 +7,18 @@
   --header-link: #1f334b;
 }
 
-body {
+html, body {
+  width: 100%;
+  height: 100%;
   margin: 0;
+}
+
+body {
   background-color: var(--background);
   color: var(--text);
   font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
