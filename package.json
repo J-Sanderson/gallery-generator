@@ -5,7 +5,7 @@
   "main": "gen.js",
   "dependencies": {
     "jimp": "^0.6.4",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.6"
   },
   "devDependencies": {},
   "scripts": {
